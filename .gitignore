@@ -216,3 +216,47 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+backend.zip
+frontend/index_deploy.html
+__pycache__/
+*.pyc
+infra/.terraform/
+infra/tfplan
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+bench/results/
+
+# ---------------------------------------------------------------- email-scan PoC
+# Terraform: globs, not path-anchored filenames. Anchoring to infra/ means a second
+# workspace or a rename silently re-exposes cleartext secrets -- state holds the
+# Cognito password, the origin secret and the public API key in the clear.
+*.tfstate
+*.tfstate.*
+*.tfstate.d/
+.terraform/
+# .terraform.lock.hcl IS committed on purpose -- it pins provider versions so a
+# fresh clone resolves the same ones. It contains no secrets.
+.terraform.tfstate.lock.info
+tfplan*
+*.tfplan
+crash.log
+crash.*.log
+
+# Real variable files carry secret VALUES. The example is the thing to publish.
+*.tfvars
+!*.tfvars.example
+
+# Customer / confidential source documents are never published from this repo.
+*.docx
+*.doc
+*.pdf
+
+# Build artifacts
+backend.zip
+lambda.zip
+frontend/index_deploy.html
+__pycache__/
+*.pyc
+
+# OS / editor cruft
+.DS_Store

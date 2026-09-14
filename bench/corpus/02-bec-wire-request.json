@@ -1,0 +1,26 @@
+{
+  "id": "02-bec-wire-request",
+  "label": "Malicious — BEC wire request (no URL, no attachment)",
+  "demo_job": "The sample that earns its place most. There is no link and no attachment, so the verdict rests entirely on pretexting, authority impersonation and payment redirection. This is the answer to \"isn't this just a URL blocklist?\" — and it is the one email in the corpus a blocklist cannot see.",
+  "expected_verdict": "malicious",
+  "should_escalate": true,
+  "escalation_reason": "verdict=malicious",
+  "email": {
+    "from": "Michael Chen <m.chen@example-cfo.net>",
+    "to": "a.okonkwo@example.com",
+    "subject": "Confidential — wire transfer needed today",
+    "headers": {
+      "Reply-To": "m.chen.cfo@example-cfo.net",
+      "Return-Path": "m.chen@example-cfo.net",
+      "Received": "from smtp-relay-3.bulkmailer.example.org ([203.0.113.91]) by mx.example.com with ESMTPS id 7Rm2Vv0Q4L for <a.okonkwo@example.com>; Tue, 08 Sep 2026 06:41:09 -0700 (PDT)",
+      "Authentication-Results": "mx.example.com; spf=pass smtp.mailfrom=example-cfo.net; dkim=pass header.d=example-cfo.net; dmarc=none header.from=example-cfo.net",
+      "Message-ID": "<CAF9d2s1c9-m.chen@example-cfo.net>",
+      "X-Mailer": "Microsoft Outlook 16.0",
+      "In-Reply-To": "<CAF9d2s1c8-a.okonkwo@example.com>",
+      "Thread-Topic": "Q3 advisory fees",
+      "Importance": "High",
+      "Content-Type": "text/plain; charset=UTF-8"
+    },
+    "body": "Are you at your desk?\n\nI'm in back-to-back sessions on the acquisition all day and can't take calls, so\nemail is the only way to reach me until this evening.\n\nI need you to process a payment to our advisors before close of business today. It's\ntime-sensitive — the fee has to clear before the announcement window opens tomorrow\nmorning — and it must stay confidential until then. Legal has asked that we keep the\ncirculation on this as tight as possible, so please don't loop in the wider finance\nteam or raise it in the group channel.\n\nPayment details:\n\n  Amount           GBP 48,750.00\n  Beneficiary      Hartwell Advisory Partners\n  Bank             Northbridge Commercial, London\n  IBAN             GB29 EXMP 6016 1331 9268 19\n  SWIFT/BIC        EXMPGB2LXXX\n  Reference        HAP-Q3-ADVISORY\n\nUse the same approval route we used for the Q1 retainer. If treasury asks for a\npurchase order, tell them it will follow from my office tomorrow — I'll sign it\nretrospectively, the engagement letter is already countersigned on my side.\n\nOne thing to note: our usual account with them has been frozen while their auditors\nfinish year-end, so the IBAN above is a new one their finance director sent me this\nmorning. Please use it rather than the details on the old invoice.\n\nConfirm by email once the payment has been released, and send me the transaction\nreference so I can pass it to their side. If anything blocks, reply here rather than\ncalling — I'll pick up email between sessions.\n\nThanks for handling this discreetly.\n\nMichael Chen\nChief Financial Officer\n\nSent from my mobile — please excuse brevity.\n"
+  }
+}

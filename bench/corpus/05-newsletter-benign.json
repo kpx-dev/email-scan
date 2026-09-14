@@ -1,0 +1,26 @@
+{
+  "id": "05-newsletter-benign",
+  "label": "Benign — engineering newsletter (the one that must NOT escalate)",
+  "demo_job": "Trivial benign, and the only sample in the corpus that should stop after Stage 1. That is its whole job: it shows Stage 2 correctly not firing, and smoke.sh asserts the gate stays quiet on it while firing on sample 01. Deliberately contains no http/https link and no attachment — the design 4.4 gate escalates any benign verdict that carries a URL or an attachment, so a single added link would make this sample escalate and silently destroy the negative case it exists to prove. If you edit it, do not add links.",
+  "expected_verdict": "benign",
+  "should_escalate": false,
+  "escalation_reason": null,
+  "email": {
+    "from": "DevTools Weekly <news@devtools-weekly.example.com>",
+    "to": "subscribers@example.com",
+    "subject": "Issue #142: what shipped in Postgres 17",
+    "headers": {
+      "Reply-To": "editors@devtools-weekly.example.com",
+      "Return-Path": "bounces+142@devtools-weekly.example.com",
+      "Received": "from mail-out-2.devtools-weekly.example.com ([192.0.2.30]) by mx.example.com with ESMTPS id 5Cq1Yy7T2M for <subscribers@example.com>; Mon, 07 Sep 2026 01:00:12 -0700 (PDT)",
+      "Authentication-Results": "mx.example.com; spf=pass smtp.mailfrom=devtools-weekly.example.com; dkim=pass header.d=devtools-weekly.example.com; dmarc=pass action=none header.from=devtools-weekly.example.com",
+      "Message-ID": "<issue-142.20260907@devtools-weekly.example.com>",
+      "List-Id": "DevTools Weekly <list.devtools-weekly.example.com>",
+      "List-Unsubscribe": "<mailto:unsubscribe+8842@devtools-weekly.example.com>",
+      "Precedence": "bulk",
+      "X-Mailer": "listmonk 3.1",
+      "Content-Type": "text/plain; charset=UTF-8"
+    },
+    "body": "DevTools Weekly — Issue #142\nMonday 7 September 2026\n\nHi there,\n\nThis week: what actually landed in Postgres 17, a short piece on connection pooling,\nand two reader questions. Plain text as always — reply to this email if you want a\ntopic covered, the editors read every reply.\n\n1. INCREMENTAL BACKUP, FOR REAL THIS TIME\n\nThe headline feature is incremental backup in the base-backup tooling. Previously the\nchoice was a full physical copy or a third-party tool that tracked changed blocks\nitself. Now the server keeps a summary of modified blocks per WAL range and the\nbackup tool asks for only those. In our test cluster — 380 GB, a fairly write-heavy\nOLTP shape — a nightly incremental came out at 9 to 14 GB against a 380 GB full, and\nrestore time went up by about four minutes because the restore has to replay the\nchain. That trade is worth it below roughly a weekly full-backup cadence and stops\nbeing worth it above it, which is roughly where the folklore already sat.\n\nOne caveat worth knowing before you rely on it: the summariser is a separate process\nand it has to be enabled before the full backup you intend to build on, not after.\nTurn it on, take a fresh full, then start taking incrementals. There is no way to\nreconstruct summaries for WAL that has already been recycled.\n\n2. CONNECTION POOLING, AND WHY YOUR P99 IS THE POOL\n\nWe keep seeing the same shape in reader-submitted flame graphs: a service whose p50 is\nfine and whose p99 is four times the p50, with the difference sitting entirely in\ntime spent waiting to acquire a connection. Two rules of thumb that have held up for\nus. First, pool size should be derived from the database's capacity, not from the\nnumber of application instances — three instances each holding twenty connections is\nsixty connections whether or not the database can serve sixty. Second, a pool that\nblocks is easier to reason about than a pool that grows: blocking gives you a queue\nyou can measure, growing gives you a database that falls over at an unpredictable\nmoment. Instrument the wait time, not just the query time. If you only measure query\nduration you will conclude the database is slow when in fact your application is\nqueueing in front of it.\n\n3. READER QUESTIONS\n\n\"Should we run the summariser on a replica?\" You can, and it moves the CPU cost off\nthe primary, but the replica has to be caught up or your incrementals lag reality.\nWe run it on the primary and have not found the overhead measurable.\n\n\"Is logical replication ready to replace our ETL?\" For change capture, mostly yes.\nFor bulk historical loads, no — the initial sync is still the slow part and you will\nwant to seed from a snapshot.\n\nThat is all for this week. Issue #143 looks at query plan regressions after a major\nversion upgrade, and what to capture before you upgrade so you can prove one.\n\n— The DevTools Weekly team\n\nYou are receiving this because you subscribed to DevTools Weekly. To unsubscribe,\nreply to this email with the word UNSUBSCRIBE in the subject line and our list\nmanager will remove you within one working day. We do not sell or share the list.\n"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "08-paste-your-own",
+  "label": "Paste your own",
+  "demo_job": "The closer. An empty template so anyone can paste one of their own emails and watch it go through the same pipeline on the same models — which is the moment the demo stops being ours and starts being theirs. It carries no content, so `bench/driver.py` skips it (`placeholder: true`) rather than benchmarking an empty request: the handler rejects an email with neither body nor subject with a 400, and counting that as a request would understate achieved RPS and pollute the application-error bucket.",
+  "expected_verdict": null,
+  "should_escalate": null,
+  "escalation_reason": null,
+  "placeholder": true,
+  "email": {
+    "from": "",
+    "subject": "",
+    "body": ""
+  }
+}

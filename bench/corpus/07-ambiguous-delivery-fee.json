@@ -1,0 +1,24 @@
+{
+  "id": "07-ambiguous-delivery-fee",
+  "label": "Suspicious — delivery redelivery fee (deliberately ambiguous)",
+  "demo_job": "The ambiguous case, and the one that shows escalation is not just a synonym for a bad verdict. Everything here is individually defensible: couriers really do hold parcels, really do charge small surcharges, and really do send tracking references. What is wrong is the shape — a payment page on a domain that is not the courier's, for GBP 1.79, with a three-day clock. Expect `suspicious`; a `benign` verdict with confidence below 0.85 is an equally correct outcome and is the case that exercises design 4.4's `low_confidence` clause rather than its verdict clause. Either way it must escalate, and the reason string on the UI's escalation arrow is the interesting part of the demo here.",
+  "expected_verdict": "suspicious",
+  "should_escalate": true,
+  "escalation_reason": "verdict=suspicious, or low_confidence=<0.85 if the model lands on benign",
+  "email": {
+    "from": "Parcel Redelivery <no-reply@parcel-redelivery.example.net>",
+    "to": "s.novak@example.com",
+    "subject": "Your parcel GB88213 is being held — action required",
+    "headers": {
+      "Reply-To": "no-reply@parcel-redelivery.example.net",
+      "Return-Path": "bounce@parcel-redelivery.example.net",
+      "Received": "from mail-3.parcel-redelivery.example.net ([203.0.113.140]) by mx.example.com with ESMTPS id 6Jn5Hh4S8D for <s.novak@example.com>; Tue, 08 Sep 2026 05:17:22 -0700 (PDT)",
+      "Authentication-Results": "mx.example.com; spf=pass smtp.mailfrom=parcel-redelivery.example.net; dkim=pass header.d=parcel-redelivery.example.net; dmarc=none header.from=parcel-redelivery.example.net",
+      "Message-ID": "<GB88213.20260908@parcel-redelivery.example.net>",
+      "X-Mailer": "SendGrid",
+      "List-Unsubscribe": "<mailto:stop@parcel-redelivery.example.net>",
+      "Content-Type": "text/plain; charset=UTF-8"
+    },
+    "body": "Hello,\n\nWe attempted to deliver your parcel on Monday 7 September at 14:40 but nobody was\navailable to sign for it, and the item is too large for your letterbox. A card was\nleft at the address.\n\n  Tracking reference  GB88213\n  Sender              Bright Home Ltd\n  Weight              2.4 kg\n  Held at             Croydon depot, unit 4\n  Held since          7 September 2026, 18:02\n\nThere is an outstanding shipping surcharge of GBP 1.79 on this item. The sender chose\nthe economy service and the parcel exceeded the size allowance for that service by\n3 cm on its longest side, so the balance is payable by the recipient before we can\nre-attempt delivery. We know this is annoying and we are sorry — it is set by the\nservice the sender selected, not by us.\n\nSettle the surcharge and choose a redelivery slot:\nhttps://parcel-redelivery.example.net/pay/GB88213\n\nRedelivery is normally next working day once the balance is cleared. If we do not hear\nfrom you within three days the parcel will be returned to the sender and any refund\nwill be handled by them rather than by us.\n\nAlternatives to paying online:\n\n  * Collect in person from the Croydon depot between 08:00 and 18:00, Monday to\n    Saturday. Bring the card that was left at your address and photo ID. The\n    surcharge is payable at the counter by card.\n  * Nominate a neighbour for delivery by replying to this email with their house\n    number. The surcharge still applies.\n  * Ask the sender to upgrade the service, in which case they pay the difference and\n    we will release the parcel without charging you.\n\nPlease do not reply to this address with card details. We will never ask for your full\ncard number, your PIN or your online banking password by email, and our payment page\nis the only place you should enter card details for this parcel.\n\nParcel Redelivery Customer Services\nReference GB88213\n"
+  }
+}

@@ -1,0 +1,46 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored because it holds a
+# real password; this example is the file that gets published.
+#
+#   cp infra/terraform.tfvars.example infra/terraform.tfvars
+#
+# Nothing here has a secret default. `basic_auth_password` and `cognito_demo_password` are
+# declared without defaults on purpose: a secret variable with a default lives in version
+# control forever, and deleting terraform.tfvars would not remove it.
+
+region = "us-east-1"
+
+# Where Bedrock is invoked, independent of the region above. EU by default: eu-central-1 is
+# the only EU region the primary model answers in. It measures ~758ms against ~489ms in
+# us-east-1, and the fallback model does not exist there -- set us-east-1 if you need both
+# lanes in one region for an A/B.
+bedrock_region = "eu-central-1"
+
+# Every resource name derives from this -- bucket, Lambda, IAM role, Cognito pool, API,
+# OAC. Set it. If you leave it unset the module default applies and you may collide with
+# an unrelated stack in the same account.
+project = "email-scan"
+
+# Must resolve to a Route53 public hosted zone you control, and must be a subdomain of
+# hosted_zone_name. The ACM certificate is DNS-validated against that zone.
+domain_name      = "email-scan.example.com"
+hosted_zone_name = "example.com"
+
+# The single demo user created in the Cognito pool by a local-exec provisioner.
+# Use a password you generated; do not reuse one across deployments.
+cognito_demo_username = "demo"
+cognito_demo_password = "<generate a strong password>"
+
+# Recovery lever only (design 7.4): swaps Cognito for HTTP Basic auth enforced by a
+# CloudFront Function at the edge. Leave false. If you set it true you must also supply
+# basic_auth_password, which has no default.
+basic_auth_enabled = false
+# basic_auth_username = "demo"
+# basic_auth_password = "<generate a strong password>"
+
+# Ceiling on the public API-key endpoint, enforced in the Lambda against an atomically
+# incremented DynamoDB counter. The gateway's route throttle bounds the rate; this bounds
+# the day. Both are needed -- 10 req/s sustained for 24h is ~864,000 model calls.
+public_daily_cap = 5000
+
+# Retention for the Lambda and API Gateway access log groups.
+log_retention_days = 14
